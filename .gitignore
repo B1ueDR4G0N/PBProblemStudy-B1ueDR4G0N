@@ -1,0 +1,5 @@
+# Original normalized PB benchmark corpus
+/normalized-PB24/
+
+# Standalone normalized PB benchmark files in the repository root
+/normalized-*.opb*
