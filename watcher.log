@@ -1,0 +1,71 @@
+runsolver version 3.4.1 (svn: 4412) Copyright (C) 2010-2013 Olivier ROUSSEL
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+NUMA information:
+  number of nodes: 1
+  memory of node 0: 15879 MiB (12871 MiB free)
+  node distances:
+     10
+
+command line: ./runsolver/src/runsolver --wall-clock-limit 10 --vsize-limit 1024 --solver-data solver.log --watcher-data watcher.log --var result.var ./naps/naps-1.02b problems/opt/clique_coloring_n5_t3.opb 
+
+running on 12 cores: 0-11
+
+Enforcing wall clock limit (soft limit, will send SIGTERM then SIGKILL): 10 seconds
+Enforcing VSIZE limit (soft limit, will send SIGTERM then SIGKILL): 1048576 KiB
+Enforcing VSIZE limit (hard limit, stack expansion will fail with SIGSEGV, brk() and mmap() will return ENOMEM): 1099776 KiB
+Linux 6.6.114.1-microsoft-standard-WSL2
+Current StackSize limit: 8192 KiB
+
+solver pid=252166, runsolver pid=252165
+
+[startup+0.0144321 s]
+# the end of solver process 252166 was just reported to runsolver
+# cumulated CPU time of all completed processes:  user=0.014518 s, system=0 s
+
+Solver just ended.
+??? end of watcher thread
+Dumping a history of the last processes samples
+
+Child status: 30
+Real time (s): 0.0145091
+CPU time (s): 0.014518
+CPU user time (s): 0.014518
+CPU system time (s): 0
+CPU usage (%): 100.061
+Max. virtual memory (cumulated for all children) (KiB): 0
+Max. memory (cumulated for all children) (KiB): 0
+
+getrusage(RUSAGE_CHILDREN,...) data:
+user time used= 0.014518
+system time used= 0
+maximum resident set size= 1920
+integral shared memory size= 0
+integral unshared data size= 0
+integral unshared stack size= 0
+page reclaims= 201
+page faults= 0
+swaps= 0
+block input operations= 0
+block output operations= 8
+messages sent= 0
+messages received= 0
+signals received= 0
+voluntary context switches= 1
+involuntary context switches= 2
+
+
+# summary of solver processes directly reported to runsolver:
+#   pid: 252166
+#   total CPU time (s): 0.014518
+#   total CPU user time (s): 0.014518
+#   total CPU system time (s): 0
+
+??? end of timestamper thread
+runsolver used 0.002361 second user time and 0.004244 second system time
+
+The end

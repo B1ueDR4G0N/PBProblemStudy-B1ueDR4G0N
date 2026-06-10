@@ -1,0 +1,6 @@
+[submodule "SCIP/vendor/scip"]
+	path = SCIP/vendor/scip
+	url = https://github.com/scipopt/scip.git
+[submodule "SCIP/vendor/soplex"]
+	path = SCIP/vendor/soplex
+	url = https://github.com/scipopt/soplex.git

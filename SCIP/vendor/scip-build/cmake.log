@@ -1,0 +1,1 @@
+-DAUTOBUILD=on -DSOPLEX_DIR=/home/bluedragon/PBSolver/SCIP/local/lib/cmake/soplex -DSYM=snauty
