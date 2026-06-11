@@ -1,10 +1,15 @@
 #include <scip/cons_linear.h>
+#include <scip/pub_event.h>
 #include <scip/scip.h>
 #include <scip/scipdefplugins.h>
+#include <scip/scip_event.h>
+#include <scip/scip_numerics.h>
 
 #include <algorithm>
 #include <cctype>
+#include <cmath>
 #include <fstream>
+#include <iomanip>
 #include <iostream>
 #include <sstream>
 #include <stdexcept>
@@ -27,6 +32,51 @@ struct ParsedExpression
    std::vector<Term> terms;
    SCIP_Real constant = 0.0;
 };
+
+void printObjectiveValue(SCIP* scip, SCIP_Real value)
+{
+   std::cout << "o ";
+   if( SCIPisIntegral(scip, value) )
+      std::cout << std::llround(value);
+   else
+      std::cout << std::setprecision(17) << value;
+   std::cout << std::endl;
+}
+
+SCIP_DECL_EVENTINIT(eventInitBestSolution)
+{
+   SCIP_CALL(SCIPcatchEvent(scip, SCIP_EVENTTYPE_BESTSOLFOUND, eventhdlr, nullptr, nullptr));
+   return SCIP_OKAY;
+}
+
+SCIP_DECL_EVENTEXIT(eventExitBestSolution)
+{
+   SCIP_CALL(SCIPdropEvent(scip, SCIP_EVENTTYPE_BESTSOLFOUND, eventhdlr, nullptr, -1));
+   return SCIP_OKAY;
+}
+
+SCIP_DECL_EVENTEXEC(eventExecBestSolution)
+{
+   SCIP_SOL* solution = SCIPeventGetSol(event);
+   if( solution != nullptr )
+      printObjectiveValue(scip, SCIPgetSolOrigObj(scip, solution));
+   return SCIP_OKAY;
+}
+
+SCIP_RETCODE includeBestSolutionEventHandler(SCIP* scip)
+{
+   SCIP_EVENTHDLR* eventHandler = nullptr;
+   SCIP_CALL(SCIPincludeEventhdlrBasic(
+      scip,
+      &eventHandler,
+      "pb_best_solution",
+      "prints improving solutions in PB competition format",
+      eventExecBestSolution,
+      nullptr));
+   SCIP_CALL(SCIPsetEventhdlrInit(scip, eventHandler, eventInitBestSolution));
+   SCIP_CALL(SCIPsetEventhdlrExit(scip, eventHandler, eventExitBestSolution));
+   return SCIP_OKAY;
+}
 
 std::string trim(const std::string& text)
 {
@@ -181,7 +231,8 @@ void addConstraint(
 void readOpb(
    SCIP* scip,
    const std::string& filename,
-   std::unordered_map<std::string, SCIP_VAR*>& variables
+   std::unordered_map<std::string, SCIP_VAR*>& variables,
+   bool& hasObjective
 )
 {
    std::ifstream input(filename);
@@ -203,7 +254,10 @@ void readOpb(
 
       const std::vector<std::string> tokens = tokenize(statement);
       if( !tokens.empty() && (tokens[0] == "min:" || tokens[0] == "max:") )
+      {
          addObjective(scip, variables, tokens);
+         hasObjective = true;
+      }
       else
          addConstraint(scip, variables, tokens, ++constraintNumber);
       statement.clear();
@@ -212,7 +266,7 @@ void readOpb(
    if( !trim(statement).empty() )
       throw std::runtime_error("末尾がセミコロンで閉じられていません");
 
-   std::cout << "読み込み完了: " << variables.size() << " 変数, "
+   std::cout << "c 読み込み完了: " << variables.size() << " 変数, "
              << constraintNumber << " 制約\n";
 }
 
@@ -237,6 +291,35 @@ const char* statusName(SCIP_STATUS status)
    }
 }
 
+const char* competitionStatus(SCIP_STATUS status, bool hasObjective)
+{
+   if( status == SCIP_STATUS_OPTIMAL )
+      return hasObjective ? "OPTIMUM FOUND" : "SATISFIABLE";
+   if( status == SCIP_STATUS_INFEASIBLE )
+      return "UNSATISFIABLE";
+   return "UNKNOWN";
+}
+
+void printCompetitionModel(
+   SCIP* scip,
+   SCIP_SOL* solution,
+   const std::unordered_map<std::string, SCIP_VAR*>& variables
+)
+{
+   std::vector<std::pair<std::string, SCIP_VAR*>> sortedVariables(variables.begin(), variables.end());
+   std::sort(sortedVariables.begin(), sortedVariables.end(), [](const auto& left, const auto& right) {
+      return left.first < right.first;
+   });
+
+   std::cout << "v";
+   for( const auto& item : sortedVariables )
+   {
+      const bool value = SCIPgetSolVal(scip, solution, item.second) > 0.5;
+      std::cout << ' ' << (value ? "" : "-") << item.first;
+   }
+   std::cout << '\n';
+}
+
 SCIP_RETCODE solve(const std::string& filename, SCIP_Real timeLimit)
 {
    SCIP* scip = nullptr;
@@ -244,11 +327,13 @@ SCIP_RETCODE solve(const std::string& filename, SCIP_Real timeLimit)
    SCIP_CALL(SCIPincludeDefaultPlugins(scip));
    SCIP_CALL(SCIPcreateProbBasic(scip, filename.c_str()));
    SCIP_CALL(SCIPsetRealParam(scip, "limits/time", timeLimit));
+   SCIP_CALL(SCIPsetIntParam(scip, "display/verblevel", 0));
 
    std::unordered_map<std::string, SCIP_VAR*> variables;
+   bool hasObjective = false;
    try
    {
-      readOpb(scip, filename, variables);
+      readOpb(scip, filename, variables, hasObjective);
    }
    catch( const std::exception& error )
    {
@@ -259,13 +344,17 @@ SCIP_RETCODE solve(const std::string& filename, SCIP_Real timeLimit)
       return SCIP_READERROR;
    }
 
+   if( hasObjective )
+      SCIP_CALL(includeBestSolutionEventHandler(scip));
+
    SCIP_CALL(SCIPsolve(scip));
-   std::cout << "状態: " << statusName(SCIPgetStatus(scip)) << '\n';
+   const SCIP_STATUS status = SCIPgetStatus(scip);
+   std::cout << "c SCIP status: " << statusName(status) << '\n';
 
    SCIP_SOL* solution = SCIPgetBestSol(scip);
    if( solution != nullptr )
    {
-      std::cout << "目的値: " << SCIPgetSolOrigObj(scip, solution) << "\n真の変数:";
+      std::cout << "c 目的値: " << SCIPgetSolOrigObj(scip, solution) << "\nc 真の変数:";
       std::vector<std::string> trueVariables;
       for( const auto& item : variables )
       {
@@ -277,6 +366,10 @@ SCIP_RETCODE solve(const std::string& filename, SCIP_Real timeLimit)
          std::cout << ' ' << name;
       std::cout << '\n';
    }
+
+   std::cout << "s " << competitionStatus(status, hasObjective) << '\n';
+   if( solution != nullptr )
+      printCompetitionModel(scip, solution, variables);
 
    for( auto& item : variables )
       SCIP_CALL(SCIPreleaseVar(scip, &item.second));
