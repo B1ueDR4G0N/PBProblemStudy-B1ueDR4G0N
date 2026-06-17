@@ -3,3 +3,26 @@
 
 # Standalone normalized PB benchmark files in the repository root
 /normalized-*.opb*
+
+# Local Gurobi credentials and Python environment
+gurobi.lic
+/GUROBI/.venv/
+
+# Python cache
+__pycache__/
+*.py[cod]
+
+# Solver run artifacts
+*.watcher.log
+*.var
+/solver.log
+/watcher.log
+/result.var
+/results/gurobi_scip/*/
+
+# Local dependency headers/libraries used while trying Open-WBO
+/OpenWBO/
+/OpenWBO/local/
+
+# External solver source/build trees kept locally
+/RoundingSat/

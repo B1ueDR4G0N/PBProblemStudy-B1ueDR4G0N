@@ -1,0 +1,8 @@
+bitvector_equalities_17arraycomm.opb
+clique_coloring_n5_t3.opb
+clique_coloring_n8_t6.opb
+knapsack_subset_sum_200.opb
+maxcut_5partite_n27.opb
+miplib_air01_dec.opb
+miplib_lp4l.opb
+vertex_cover_grid_dim072.opb

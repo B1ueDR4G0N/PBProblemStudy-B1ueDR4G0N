@@ -1,1 +1,177 @@
 # PBProblemStudy-B1ueDR4G0N
+
+Pseudo-Boolean (PB/OPB) 問題を、複数のソルバで比較するための実験フォルダです。
+
+このリポジトリでは次の5ソルバを扱います。
+
+| ソルバ | 位置づけ | 実行ファイル/入口 |
+| --- | --- | --- |
+| NaPS | PB専用。SAT符号化・BDD系のPBソルバ | `naps/naps-1.02b` |
+| SCIP | MIPソルバ。自作OPB読み込みラッパー | `SCIP/build/pb_scip` |
+| Gurobi | 商用MIPソルバ。WLSライセンス使用 | `GUROBI/pb_gurobi.py` |
+| RoundingSat | PBネイティブの切除平面/CDCL系ソルバ | `RoundingSat/bin/roundingsat` |
+| MaxSAT/RC2 | OPBをMaxSATへ変換してPySAT RC2で解く | `MAXSAT/pb_rc2.py` |
+
+## 比較用問題
+
+主な比較問題は [problems/gurobi_scip](problems/gurobi_scip) にあります。
+
+| 問題 | 特徴 |
+| --- | --- |
+| `clique_coloring_n5_t3.opb` | 小さめの論理・基数制約。多くのソルバが速い |
+| `clique_coloring_n8_t6.opb` | 密な論理・基数制約。MaxSAT/RC2とGurobiが強い |
+| `knapsack_subset_sum_200.opb` | 単一大規模ナップサック。RoundingSat、Gurobi、SCIPが強い |
+| `maxcut_5partite_n27.opb` | MaxCut系。Gurobiが最適性証明まで速い |
+| `miplib_air01_dec.opb` | MIPLIB由来の判定問題。MIP系とRoundingSatが速い |
+| `miplib_lp4l.opb` | MIPLIB由来の最適化。SCIP/Gurobiが強い |
+| `vertex_cover_grid_dim072.opb` | グリッド頂点被覆。RoundingSat/RC2が強い |
+| `bitvector_equalities_17arraycomm.opb` | 巨大係数あり。数値誤差の観察用で、性能比較本命からは外す |
+
+追加のPBS比較問題は [problems/pbs_extra](problems/pbs_extra) にあります。圧縮済みPB24 DEC-LINから、頂点被覆、sumineq、subsetcard、bitvector系を1問ずつ展開しています。
+
+## 10秒比較の要約
+
+実験日: 2026-06-17  
+制限: `runsolver --wall-clock-limit 10`、各ソルバ内部制限も可能な範囲で10秒。
+
+| 問題 | NaPS | SCIP | Gurobi | RoundingSat | MaxSAT/RC2 |
+| --- | --- | --- | --- | --- | --- |
+| `clique_coloring_n5_t3` | OPT 2, 0.016s | OPT 2, 0.116s | OPT 2, 0.062s | OPT 2, 0.086s | OPT 2, 0.092s |
+| `clique_coloring_n8_t6` | SAT/TIMEOUT, inc 3 | TIMEOUT, inc 2 | OPT 2, 0.305s | SAT/TIMEOUT, inc 2 | OPT 2, 0.163s |
+| `knapsack_subset_sum_200` | UNKNOWN | OPT -48992, 0.196s | OPT -48992, 0.058s | OPT -48992, 0.012s | TIMEOUT |
+| `maxcut_5partite_n27` | SAT/TIMEOUT, inc -156 | TIMEOUT, inc -169 | OPT -180, 2.653s | SAT/TIMEOUT, inc -180 | TIMEOUT |
+| `miplib_air01_dec` | UNKNOWN | SAT, 0.192s | SAT, 0.050s | SAT, 0.015s | TIMEOUT |
+| `miplib_lp4l` | SAT/TIMEOUT, inc 4499 | OPT 2967, 0.100s | OPT 2967, 0.100s | SAT/TIMEOUT, inc 3088 | TIMEOUT |
+| `vertex_cover_grid_dim072` | SAT/TIMEOUT, inc 2664 | TIMEOUT, inc 2664 | TIMEOUT, inc 2664 | OPT 2664, 7.230s | OPT 2664, 1.249s |
+| `bitvector_equalities_17arraycomm` | UNKNOWN | SATだが検算で1制約違反 | UNSAT, 0.067s | UNKNOWN | UNSAT, 0.146s |
+
+`inc` は暫定値です。`SAT/TIMEOUT` は実行可能解は出たが最適性証明までは終わっていない、という意味で読んでください。
+
+## 得意分野まとめ
+
+PBS/PBOという問題種別で見た詳しい比較は [results/pbs_pbo/README.md](results/pbs_pbo/README.md) にまとめています。
+
+**NaPS**
+
+小さくて論理・基数制約っぽいPBでは速いです。`clique_coloring_n5_t3` は最速級でした。一方、MIPLIB系や大きな重み付き最適化では10秒だと証明まで届きにくいです。
+
+**SCIP**
+
+MIPとして自然な線形最適化が得意です。`knapsack_subset_sum_200` と `miplib_lp4l` は安定して最適性証明できました。ただし巨大係数を含む `bitvector_equalities_17arraycomm` では、出力解が元OPB検算で制約違反になったため、数値許容誤差に注意が必要です。
+
+**Gurobi**
+
+全体的にMIP系で強く、`maxcut_5partite_n27` を10秒以内に最適性証明できた唯一のソルバでした。`clique_coloring_n8_t6` も速いです。WLSライセンスとネットワーク認証が必要です。
+
+**RoundingSat**
+
+PBネイティブらしく、`knapsack_subset_sum_200` が非常に速いです。`vertex_cover_grid_dim072` も最適性証明まで到達しました。反面、`miplib_lp4l` のようなMIPLIB由来の最適化ではSCIP/Gurobiより苦戦します。
+
+**MaxSAT/RC2**
+
+PBをMaxSATへ変換して解くため、論理・基数制約や頂点被覆系で鋭く効きます。`clique_coloring_n8_t6` と `vertex_cover_grid_dim072` は非常に速いです。一方でナップサックやMIPLIB系の大きな重み付き線形制約は苦手です。
+
+## 実行コマンド
+
+以下はPBSolverディレクトリ直下から実行します。
+
+### NaPS
+
+```bash
+./runsolver/src/runsolver \
+  --wall-clock-limit 10 \
+  --solver-data naps-solver.log \
+  --var naps-result.var \
+  ./naps/naps-1.02b problems/gurobi_scip/clique_coloring_n5_t3.opb
+```
+
+### SCIP
+
+```bash
+./runsolver/src/runsolver \
+  --wall-clock-limit 10 \
+  --solver-data scip-solver.log \
+  --var scip-result.var \
+  ./SCIP/build/pb_scip problems/gurobi_scip/clique_coloring_n5_t3.opb 10
+```
+
+### Gurobi
+
+```bash
+./runsolver/src/runsolver \
+  --wall-clock-limit 10 \
+  --solver-data gurobi-solver.log \
+  --var gurobi-result.var \
+  python3 GUROBI/pb_gurobi.py problems/gurobi_scip/clique_coloring_n5_t3.opb 10
+```
+
+Gurobi WLSライセンスは `~/.gurobi/gurobi.lic` を使います。`GUROBI/pb_gurobi.py` はこのライセンスファイルを自動で `GRB_LICENSE_FILE` に設定します。
+
+### RoundingSat
+
+```bash
+./runsolver/src/runsolver \
+  --wall-clock-limit 10 \
+  --solver-data roundingsat-solver.log \
+  --var roundingsat-result.var \
+  RoundingSat/bin/roundingsat --time-limit=10 --print-sol=1 \
+  problems/gurobi_scip/clique_coloring_n5_t3.opb
+```
+
+### MaxSAT/RC2
+
+```bash
+./runsolver/src/runsolver \
+  --wall-clock-limit 10 \
+  --solver-data rc2-solver.log \
+  --var rc2-result.var \
+  python3 MAXSAT/pb_rc2.py problems/gurobi_scip/clique_coloring_n5_t3.opb 10
+```
+
+RC2は `min:` 目的関数のみ対応しています。OPBの制約はCNFへエンコードし、目的関数は重み付きソフト節へ変換します。
+
+## ラッパープログラムのPBS/PBO対応
+
+| プログラム | PBS | PBO | 備考 |
+| --- | --- | --- | --- |
+| `SCIP/pb_scip.cpp` | 対応 | 対応 | `min:` / `max:` の両方に対応。目的関数がなければSAT/UNSAT判定 |
+| `GUROBI/pb_gurobi.py` | 対応 | 対応 | `min:` / `max:` の両方に対応。WLSライセンスが必要 |
+| `MAXSAT/pb_rc2.py` | 対応 | 一部対応 | PBSと `min:` PBOに対応。`max:` PBOは未対応 |
+
+NaPSとRoundingSatは外部ソルバ本体なので、正規化された線形OPBであればPBS/PBOの両方を直接扱えます。
+
+## 一括実験
+
+個別ログを残したい場合は、例えば次のようにします。
+
+```bash
+mkdir -p results/run/scip
+for problem in problems/gurobi_scip/*.opb; do
+  name=$(basename "$problem" .opb)
+  ./runsolver/src/runsolver \
+    --wall-clock-limit 10 \
+    --solver-data "results/run/scip/${name}.watcher.log" \
+    --var "results/run/scip/${name}.var" \
+    ./SCIP/build/pb_scip "$problem" 10 \
+    > "results/run/scip/${name}.log" 2>&1
+done
+```
+
+ソルバ部分を差し替えれば、同じ形で他のソルバも測れます。詳細ログは大きくなりやすいので、gitでは追跡しない設定にしています。
+
+## ディレクトリ
+
+| パス | 内容 |
+| --- | --- |
+| `problems/gurobi_scip/` | 5ソルバ比較用のOPB問題 |
+| `problems/pbs_extra/` | 圧縮ファイルから追加したPBS比較問題 |
+| `SCIP/` | SCIPラッパーとビルド済み実行ファイル |
+| `GUROBI/` | Gurobi Pythonラッパー |
+| `MAXSAT/` | PySAT RC2 MaxSATラッパー |
+| `RoundingSat/` | RoundingSat本体とローカルメモ |
+| `naps/` | NaPS実行ファイル |
+| `runsolver/src/runsolver` | 時間制限・計測用ランナー |
+
+## 補足
+
+実験全体の見方、ログの読み方、再実行コマンドは [results/README.md](results/README.md) にまとめています。最新の要約レポートは [results/gurobi_scip/README.md](results/gurobi_scip/README.md) にもあります。60秒で差が出やすい問題に絞った追加レポートは [results/sixty_sec/README.md](results/sixty_sec/README.md)、PBS/PBO特性別の追加レポートは [results/pbs_pbo/README.md](results/pbs_pbo/README.md)、NaPSが最速になる例は [results/naps_fastest/README.md](results/naps_fastest/README.md)、問題別順位表は [results/rankings/README.md](results/rankings/README.md) です。個別ログは整理済みです。
