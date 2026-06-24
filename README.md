@@ -2,14 +2,24 @@
 
 Pseudo-Boolean (PB/OPB) 問題を、複数のソルバで比較するための実験フォルダです。
 
+公開時の外部ソフトウェア・ライセンス・ベンチマークデータの扱いは [THIRD_PARTY.md](THIRD_PARTY.md) にまとめています。このリポジトリは自作ラッパー、実験メモ、比較レポートを中心に置き、外部ソルバ本体や商用ライセンス情報は含めない方針です。
+
+外部依存の初期セットアップは、次のスクリプトでまとめて実行できます。
+
+```bash
+scripts/init_third_party.sh
+```
+
+このスクリプトは、SCIP/SoPlex submodule、Python依存、runsolverのビルド、RoundingSatのcloneを行います。GurobiライセンスとNaPSバイナリは利用者自身で取得・配置してください。
+
 このリポジトリでは次の5ソルバを扱います。
 
 | ソルバ | 位置づけ | 実行ファイル/入口 |
 | --- | --- | --- |
-| NaPS | PB専用。SAT符号化・BDD系のPBソルバ | `naps/naps-1.02b` |
-| SCIP | MIPソルバ。自作OPB読み込みラッパー | `SCIP/build/pb_scip` |
+| NaPS | PB専用。SAT符号化・BDD系のPBソルバ | 各自で入手して `naps/naps-1.02b` に配置 |
+| SCIP | MIPソルバ。自作OPB読み込みラッパー | submoduleからSCIP/SoPlexを用意し `SCIP/build/pb_scip` をビルド |
 | Gurobi | 商用MIPソルバ。WLSライセンス使用 | `GUROBI/pb_gurobi.py` |
-| RoundingSat | PBネイティブの切除平面/CDCL系ソルバ | `RoundingSat/bin/roundingsat` |
+| RoundingSat | PBネイティブの切除平面/CDCL系ソルバ | 各自でclone/buildして `RoundingSat/bin/roundingsat` を用意 |
 | MaxSAT/RC2 | OPBをMaxSATへ変換してPySAT RC2で解く | `MAXSAT/pb_rc2.py` |
 
 ## 比較用問題
@@ -74,6 +84,7 @@ PBをMaxSATへ変換して解くため、論理・基数制約や頂点被覆系
 ## 実行コマンド
 
 以下はPBSolverディレクトリ直下から実行します。
+NaPS、SCIP、RoundingSatの実行ファイルは公開リポジトリには含めず、ローカルで導入・ビルドして使います。
 
 ### NaPS
 
@@ -165,12 +176,12 @@ done
 | --- | --- |
 | `problems/gurobi_scip/` | 5ソルバ比較用のOPB問題 |
 | `problems/pbs_extra/` | 圧縮ファイルから追加したPBS比較問題 |
-| `SCIP/` | SCIPラッパーとビルド済み実行ファイル |
+| `SCIP/` | SCIPラッパー、CMake設定、SCIP/SoPlex submodule。`build/` と `local/` はローカル生成物 |
 | `GUROBI/` | Gurobi Pythonラッパー |
 | `MAXSAT/` | PySAT RC2 MaxSATラッパー |
-| `RoundingSat/` | RoundingSat本体とローカルメモ |
-| `naps/` | NaPS実行ファイル |
-| `runsolver/src/runsolver` | 時間制限・計測用ランナー |
+| `RoundingSat/` | ローカルにcloneするRoundingSat本体。Git追跡対象外 |
+| `naps/` | ローカルに置くNaPS実行ファイル。Git追跡対象外 |
+| `runsolver/src/` | 時間制限・計測用ランナーのソース。実行ファイルはローカルでmake |
 
 ## 補足
 

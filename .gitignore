@@ -20,9 +20,25 @@ __pycache__/
 /result.var
 /results/gurobi_scip/*/
 
+# Build products and local installations
+/SCIP/build/
+/SCIP/local/
+/SCIP/vendor/*-build/
+/runsolver/src/runsolver
+/runsolver/src/*.o
+/runsolver/src/*.d
+/naps/naps-1.02b
+
 # Local dependency headers/libraries used while trying Open-WBO
 /OpenWBO/
 /OpenWBO/local/
 
 # External solver source/build trees kept locally
 /RoundingSat/
+
+# Curated representative logs kept for reports
+!/LOG/
+!/LOG/**
+
+# Windows alternate data stream metadata accidentally created on download
+*:Zone.Identifier

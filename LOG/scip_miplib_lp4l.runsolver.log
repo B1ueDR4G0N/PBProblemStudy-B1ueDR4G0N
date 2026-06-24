@@ -1,0 +1,89 @@
+runsolver version 3.4.1 (svn: 4412) Copyright (C) 2010-2013 Olivier ROUSSEL
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+NUMA information:
+  number of nodes: 1
+  memory of node 0: 15878 MiB (13959 MiB free)
+  node distances:
+     10
+
+command line: ./runsolver/src/runsolver --wall-clock-limit 10 --solver-data LOG/scip_miplib_lp4l.watcher.log --var LOG/scip_miplib_lp4l.var ./SCIP/build/pb_scip problems/gurobi_scip/miplib_lp4l.opb 10 
+
+running on 12 cores: 0-11
+
+Enforcing wall clock limit (soft limit, will send SIGTERM then SIGKILL): 10 seconds
+Linux 6.18.33.1-microsoft-standard-WSL2
+solver pid=4, runsolver pid=3
+Current StackSize limit: 8192 KiB
+
+
+[startup+0.100098 s]*
+/proc/loadavg: 0.14 0.16 0.24 3/438 5
+/proc/meminfo: memFree=14234184/16259724 swapFree=4194304/4194304
+[pid=4] ppid=3 vsize=45660 memory=31780 CPUtime=0.08 cores=0-11
+/proc/4/stat : 4 (pb_scip) R 3 4 1 0 -1 4194304 5155 0 3 0 7 1 0 0 20 0 1 0 975241 46755840 7929 18446744073709551615 101445667983360 101445668014597 140726450099568 0 0 0 0 4096 2 0 0 0 17 2 0 0 0 0 0 101445668026568 101445668028448 101446297960448 140726450108557 140726450108618 140726450108618 140726450114531 0
+/proc/4/statm: 11415 7945 3097 8 0 7553 0
+Current children cumulated CPU time: 0.08 s
+Current children cumulated vsize: 45660 KiB
+Current children cumulated memory: 31780 KiB
+
+[startup+0.128295 s]
+# the end of solver process 4 was just reported to runsolver
+# cumulated CPU time of all completed processes:  user=0.096991 s, system=0.024247 s
+
+Solver just ended.
+??? end of watcher thread
+Dumping a history of the last processes samples
+
+[startup+0.100098 s]*
+/proc/loadavg: 0.14 0.16 0.24 3/438 5
+/proc/meminfo: memFree=14234184/16259724 swapFree=4194304/4194304
+[pid=4] ppid=3 vsize=45660 memory=31780 CPUtime=0.08 cores=0-11
+/proc/4/stat : 4 (pb_scip) R 3 4 1 0 -1 4194304 5155 0 3 0 7 1 0 0 20 0 1 0 975241 46755840 7929 18446744073709551615 101445667983360 101445668014597 140726450099568 0 0 0 0 4096 2 0 0 0 17 2 0 0 0 0 0 101445668026568 101445668028448 101446297960448 140726450108557 140726450108618 140726450108618 140726450114531 0
+/proc/4/statm: 11415 7945 3097 8 0 7553 0
+Current children cumulated CPU time: 0.08 s
+Current children cumulated vsize: 45660 KiB
+Current children cumulated memory: 31780 KiB
+
+Child status: 0
+Real time (s): 0.128348
+CPU time (s): 0.121238
+CPU user time (s): 0.096991
+CPU system time (s): 0.024247
+CPU usage (%): 94.4604
+Max. virtual memory (cumulated for all children) (KiB): 45660
+Max. memory (cumulated for all children) (KiB): 31780
+
+getrusage(RUSAGE_CHILDREN,...) data:
+user time used= 0.096991
+system time used= 0.024247
+maximum resident set size= 34660
+integral shared memory size= 0
+integral unshared data size= 0
+integral unshared stack size= 0
+page reclaims= 5886
+page faults= 3
+swaps= 0
+block input operations= 21592
+block output operations= 16
+messages sent= 0
+messages received= 0
+signals received= 0
+voluntary context switches= 7
+involuntary context switches= 1
+
+
+# summary of solver processes directly reported to runsolver:
+#   pid: 4
+#   total CPU time (s): 0.121238
+#   total CPU user time (s): 0.096991
+#   total CPU system time (s): 0.024247
+
+??? end of timestamper thread
+runsolver used 0 second user time and 0.003903 second system time
+
+The end

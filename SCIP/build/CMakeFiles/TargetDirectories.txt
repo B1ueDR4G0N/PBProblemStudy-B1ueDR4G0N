@@ -1,3 +1,0 @@
-/home/bluedragon/PBSolver/SCIP/build/CMakeFiles/pb_scip.dir
-/home/bluedragon/PBSolver/SCIP/build/CMakeFiles/edit_cache.dir
-/home/bluedragon/PBSolver/SCIP/build/CMakeFiles/rebuild_cache.dir
