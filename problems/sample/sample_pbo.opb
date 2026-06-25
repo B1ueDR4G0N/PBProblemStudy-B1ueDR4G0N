@@ -1,0 +1,9 @@
+* Self-made PBO sample for this repository.
+* This file is intentionally tiny and may be redistributed with this project.
+* #variable= 3 #constraint= 2
+*
+* Choose at least one item while respecting a small capacity.
+* Minimize the negated profit, so the optimum is the highest profit feasible set.
+min: -3 x1 -2 x2 -4 x3 ;
++1 x1 +1 x2 +1 x3 >= 1 ;
++2 x1 +1 x2 +3 x3 <= 3 ;

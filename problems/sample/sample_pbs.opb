@@ -1,0 +1,11 @@
+* Self-made PBS sample for this repository.
+* This file is intentionally tiny and may be redistributed with this project.
+* #variable= 3 #constraint= 3
+*
+* Meaning:
+*   x1 or x2 must be true
+*   x1 and x3 cannot both be true
+*   x2 implies x3
++1 x1 +1 x2 >= 1 ;
++1 x1 +1 x3 <= 1 ;
+-1 x2 +1 x3 >= 0 ;

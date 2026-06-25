@@ -1,45 +1,35 @@
-# Easy PB Problems
+# PB Problems
 
-NaPSで短時間に解ける、未圧縮のOPB問題をまとめています。
+公開リポジトリでは、外部ベンチマーク由来のOPB問題は再配布しません。
+Gitで追跡する `.opb` は [sample](sample) の自作サンプルだけです。
+
+過去の比較実験で使った問題名や結果は `results/` 以下のレポートに残しています。
+再現したい場合は、PB競技ベンチマークや各ソルバ付属のテスト問題など、元の配布元から利用者自身で取得してください。
+本実験では、主に [Pseudo-Boolean Competition 2025](https://www.cril.univ-artois.fr/PB25/) の **Benchmarks available in the PB24 format** にある `normalized-PB24.tar` を使いました。
 
 ## 実行方法
 
 PBSolverディレクトリから実行してください。
 
 ```bash
-./naps/naps-1.02b problems/dec/grid6_07.opb
-./naps/naps-1.02b problems/opt/clique_coloring_n5_t3.opb
+./naps/naps-1.02b problems/sample/sample_pbs.opb
+./naps/naps-1.02b problems/sample/sample_pbo.opb
 ```
 
 モデル（変数の割り当て）を表示しない場合は、末尾に `-nm` を付けます。
 
 ```bash
-./naps/naps-1.02b problems/opt/clique_coloring_n5_t3.opb -nm
+./naps/naps-1.02b problems/sample/sample_pbo.opb -nm
 ```
 
 ## 問題一覧
 
-### dec
-
-充足可能性を判定する問題です。
-
 | ファイル | 期待結果 | 実測時間 |
 | --- | --- | ---: |
-| `dec/grid6_07.opb` | `UNSATISFIABLE` | 約0.004秒 |
-| `dec/subsetcard_eq_random4reg_10.opb` | `UNSATISFIABLE` | 約0.008秒 |
-| `dec/sumineq_arity5_p005.opb` | `UNSATISFIABLE` | 約0.008秒 |
+| `sample/sample_pbs.opb` | `SATISFIABLE` | 極小 |
+| `sample/sample_pbo.opb` | `OPTIMUM FOUND`、最適値 `-5` | 極小 |
 
-### opt
-
-目的関数を最適化する問題です。
-
-| ファイル | 期待結果 | 実測時間 |
-| --- | --- | ---: |
-| `opt/clique_coloring_n5_t3.opb` | `OPTIMUM FOUND`、最適値 `2` | 約0.017秒 |
-| `opt/clique_coloring_n6_t4.opb` | `OPTIMUM FOUND`、最適値 `2` | 約0.078秒 |
-| `opt/knapsack_profit_ceiling_20.opb` | `OPTIMUM FOUND`、最適値 `-318` | 約0.25秒 |
-
-実測時間はこの環境での目安です。
+実測時間はソルバや環境で変わります。
 
 ## 時間制限付き実行
 
@@ -50,5 +40,5 @@ PBSolverディレクトリから実行してください。
   --wall-clock-limit 10 \
   --solver-data solver.log \
   --var result.var \
-  ./naps/naps-1.02b problems/opt/clique_coloring_n5_t3.opb
+  ./naps/naps-1.02b problems/sample/sample_pbo.opb
 ```

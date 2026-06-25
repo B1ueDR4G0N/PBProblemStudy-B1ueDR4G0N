@@ -1,6 +1,8 @@
 # 追加PBS比較問題
 
-圧縮済みの `normalized-PB24/DEC-LIN` から、PBS、つまり目的関数なしの判定問題を4問展開しました。
+圧縮済みの `normalized-PB24/DEC-LIN` から、PBS、つまり目的関数なしの判定問題を4問展開して比較しました。
+ただし、外部ベンチマーク由来の `.opb` 本体は、再配布条件をこのリポジトリ側で保証できないためGitでは追跡しません。
+再現したい場合は、[Pseudo-Boolean Competition 2025](https://www.cril.univ-artois.fr/PB25/) の **Benchmarks available in the PB24 format** にある `normalized-PB24.tar` を取得し、下表の対応する問題をローカルに展開してください。
 
 | ファイル | 元ファイル | 変数/制約 | 特徴 |
 | --- | --- | --- | --- |
@@ -32,7 +34,7 @@ PY
   --wall-clock-limit 10 \
   --solver-data /tmp/scip-pbs.watcher.log \
   --var /tmp/scip-pbs.var \
-  ./SCIP/build/pb_scip problems/pbs_extra/vertex_cover_grid6_07_shuf3.opb 10
+  ./SCIP/build/pb_scip problems/sample/sample_pbs.opb 10
 ```
 
 ソルバ部分を差し替えれば、NaPS、Gurobi、RoundingSat、MaxSAT/RC2でも同じ問題を比較できます。

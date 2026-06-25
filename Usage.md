@@ -175,10 +175,10 @@ NaPSを10秒制限で動かす例:
 ```bash
 ./runsolver/src/runsolver \
   --wall-clock-limit 10 \
-  --solver-data LOG/naps_clique_coloring_n5_t3.watcher.log \
-  --var LOG/naps_clique_coloring_n5_t3.var \
-  ./naps/naps-1.02b problems/gurobi_scip/clique_coloring_n5_t3.opb \
-  > LOG/naps_clique_coloring_n5_t3.runsolver.log 2>&1
+  --solver-data LOG/naps_sample_pbo.watcher.log \
+  --var LOG/naps_sample_pbo.var \
+  ./naps/naps-1.02b problems/sample/sample_pbo.opb \
+  > LOG/naps_sample_pbo.runsolver.log 2>&1
 ```
 
 SCIPラッパーを10秒制限で動かす例:
@@ -186,10 +186,10 @@ SCIPラッパーを10秒制限で動かす例:
 ```bash
 ./runsolver/src/runsolver \
   --wall-clock-limit 10 \
-  --solver-data LOG/scip_miplib_lp4l.watcher.log \
-  --var LOG/scip_miplib_lp4l.var \
-  ./SCIP/build/pb_scip problems/gurobi_scip/miplib_lp4l.opb 10 \
-  > LOG/scip_miplib_lp4l.runsolver.log 2>&1
+  --solver-data LOG/scip_sample_pbo.watcher.log \
+  --var LOG/scip_sample_pbo.var \
+  ./SCIP/build/pb_scip problems/sample/sample_pbo.opb 10 \
+  > LOG/scip_sample_pbo.runsolver.log 2>&1
 ```
 
 Gurobiラッパーを10秒制限で動かす例:
@@ -197,10 +197,10 @@ Gurobiラッパーを10秒制限で動かす例:
 ```bash
 ./runsolver/src/runsolver \
   --wall-clock-limit 10 \
-  --solver-data LOG/gurobi_maxcut_5partite_n27.watcher.log \
-  --var LOG/gurobi_maxcut_5partite_n27.var \
-  python3 GUROBI/pb_gurobi.py problems/gurobi_scip/maxcut_5partite_n27.opb 10 \
-  > LOG/gurobi_maxcut_5partite_n27.runsolver.log 2>&1
+  --solver-data LOG/gurobi_sample_pbo.watcher.log \
+  --var LOG/gurobi_sample_pbo.var \
+  python3 GUROBI/pb_gurobi.py problems/sample/sample_pbo.opb 10 \
+  > LOG/gurobi_sample_pbo.runsolver.log 2>&1
 ```
 
 GurobiはWLSライセンスを使うため、`~/.gurobi/gurobi.lic` が必要です。

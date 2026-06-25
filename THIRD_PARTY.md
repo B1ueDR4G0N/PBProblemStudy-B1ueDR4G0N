@@ -13,7 +13,7 @@
 | `MAXSAT/pb_rc2.py` | PySAT/RC2へOPBを変換して解く自作Pythonラッパー |
 | `README.md`, `Usage.md`, `results/**/README.md` | 実験メモ、使い方、比較レポート |
 | `LOG/` | 代表的な実行ログ。Gurobiのライセンス識別情報は伏せています |
-| `problems/` の一部 `.opb` | 比較レポート再現用に抜き出した小さな問題 |
+| `problems/sample/` の `.opb` | このリポジトリ用に作成した自作の極小サンプル |
 
 ## 利用者が別途入手するもの
 
@@ -199,9 +199,13 @@ PySATおよび同梱・依存ライブラリの利用条件は、Pythonパッケ
 
 ## ベンチマークデータについて
 
-`problems/` 以下の `.opb` ファイルは、比較レポートを再現しやすくするために抜き出した小さな問題です。特に明記がない限り、このプロジェクトが問題そのものを作成したわけではありません。
+外部ベンチマーク由来の `.opb` ファイルは、再配布条件をこのリポジトリ側で保証できないためGitで追跡しません。
+比較レポートに出てくる問題を再現したい場合は、PB競技ベンチマークや各ソルバ付属のテスト問題など、元の配布元から利用者自身で取得してください。
 
-元データの再配布条件が不明な場合や、より安全に公開したい場合は、`.opb` ファイルもGitから外し、READMEに「どこからダウンロードし、どの問題を展開するか」だけを書く方針にしてください。
+本実験で使ったOPB問題は、主に [Pseudo-Boolean Competition 2025](https://www.cril.univ-artois.fr/PB25/) の **Benchmarks available in the PB24 format** にある `normalized-PB24.tar` から取り出しました。
+利用者はこのページからアーカイブをダウンロードし、ローカルで展開して必要な問題だけを配置してください。
+
+例外として、`problems/sample/` の `.opb` はこのリポジトリ用に作成した極小サンプルです。PBS/PBOの動作確認用として公開リポジトリに含めています。
 
 ## Gitで追跡しないもの
 
@@ -218,6 +222,8 @@ runsolver/src/*.d
 gurobi.lic
 normalized-PB24/
 normalized-*.opb*
+problems/**/*.opb
+!problems/sample/*.opb
 *:Zone.Identifier
 ```
 

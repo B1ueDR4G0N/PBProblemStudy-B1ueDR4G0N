@@ -4,6 +4,11 @@
 # Standalone normalized PB benchmark files in the repository root
 /normalized-*.opb*
 
+# External benchmark OPB files are not redistributed.
+/problems/**/*.opb
+!/problems/sample/
+!/problems/sample/*.opb
+
 # Local Gurobi credentials and Python environment
 gurobi.lic
 /GUROBI/.venv/

@@ -3,6 +3,9 @@
 同じ環境で、SCIPとNaPSの得意領域の違いを確認しやすい2問です。
 実測時間には `runsolver` 自体の起動時間も含まれます。
 
+ここで扱った `.opb` 本体は外部ベンチマーク由来のため、公開リポジトリではGit追跡していません。
+再現したい場合は、[Pseudo-Boolean Competition 2025](https://www.cril.univ-artois.fr/PB25/) の **Benchmarks available in the PB24 format** にある `normalized-PB24.tar` などから取得し、同じファイル名でローカルに配置してください。
+
 ## 1. SCIP向き: bitvector equalities
 
 `scip_favored_bitvector_equalities.opb`
