@@ -39,16 +39,36 @@ experiment,problem,pbs_pbo,problem_kind,rank,solver,status,value,wall_time_sec,n
 10s,vertex_cover_grid_dim072,PBO,vertex_cover,3,SCIP,TIMEOUT,2664,10.004,incumbent
 10s,vertex_cover_grid_dim072,PBO,vertex_cover,4,NaPS,SATISFIABLE / TIMEOUT,2664,10.008,incumbent
 10s,vertex_cover_grid_dim072,PBO,vertex_cover,5,Gurobi,TIMEOUT,2664,10.015,incumbent
+60s,bitvector_equalities_17arraycomm,PBS,bitvector_equalities,1,MaxSAT/RC2,UNSATISFIABLE,,0.168,proved
+60s,bitvector_equalities_17arraycomm,PBS,bitvector_equalities,2,Gurobi,UNSATISFIABLE,,0.491,proved
+60s,bitvector_equalities_17arraycomm,PBS,bitvector_equalities,3,RoundingSat,UNSATISFIABLE,,10.243,proved
+60s,bitvector_equalities_17arraycomm,PBS,bitvector_equalities,4,NaPS,UNKNOWN,,60.003,timeout
+60s,bitvector_equalities_17arraycomm,PBS,bitvector_equalities,5,SCIP,SATISFIABLE,,0.044,invalid_solution_by_opb_check
+60s,clique_coloring_n5_t3,PBO,clique_coloring,1,NaPS,OPTIMUM FOUND,2,0.015,proved
+60s,clique_coloring_n5_t3,PBO,clique_coloring,2,Gurobi,OPTIMUM FOUND,2,0.064,proved
+60s,clique_coloring_n5_t3,PBO,clique_coloring,3,MaxSAT/RC2,OPTIMUM FOUND,2,0.082,proved
+60s,clique_coloring_n5_t3,PBO,clique_coloring,4,RoundingSat,OPTIMUM FOUND,2,0.098,proved
+60s,clique_coloring_n5_t3,PBO,clique_coloring,5,SCIP,OPTIMUM FOUND,2,0.105,proved
 60s,clique_coloring_n8_t6,PBO,clique_coloring,1,MaxSAT/RC2,OPTIMUM FOUND,2,0.152,proved
 60s,clique_coloring_n8_t6,PBO,clique_coloring,2,Gurobi,OPTIMUM FOUND,2,0.671,proved
 60s,clique_coloring_n8_t6,PBO,clique_coloring,3,SCIP,OPTIMUM FOUND,2,21.258,proved
 60s,clique_coloring_n8_t6,PBO,clique_coloring,4,RoundingSat,SATISFIABLE / TIMEOUT,2,60.002,incumbent
 60s,clique_coloring_n8_t6,PBO,clique_coloring,5,NaPS,SATISFIABLE / TIMEOUT,3,60.002,incumbent
+60s,knapsack_subset_sum_200,PBO,knapsack_subset_sum,1,RoundingSat,OPTIMUM FOUND,-48992,0.012,proved
+60s,knapsack_subset_sum_200,PBO,knapsack_subset_sum,2,Gurobi,OPTIMUM FOUND,-48992,0.061,proved
+60s,knapsack_subset_sum_200,PBO,knapsack_subset_sum,3,SCIP,OPTIMUM FOUND,-48992,0.142,proved
+60s,knapsack_subset_sum_200,PBO,knapsack_subset_sum,4,NaPS,SATISFIABLE / TIMEOUT,-48932,60.019,incumbent
+60s,knapsack_subset_sum_200,PBO,knapsack_subset_sum,5,MaxSAT/RC2,TIMEOUT,,60.034,no_solution
 60s,maxcut_5partite_n27,PBO,maxcut,1,Gurobi,OPTIMUM FOUND,-180,2.673,proved
 60s,maxcut_5partite_n27,PBO,maxcut,2,SCIP,OPTIMUM FOUND,-180,19.653,proved
 60s,maxcut_5partite_n27,PBO,maxcut,3,RoundingSat,SATISFIABLE / TIMEOUT,-180,60.003,incumbent
 60s,maxcut_5partite_n27,PBO,maxcut,4,NaPS,SATISFIABLE / TIMEOUT,-176,60.002,incumbent
 60s,maxcut_5partite_n27,PBO,maxcut,5,MaxSAT/RC2,TIMEOUT,,60.004,no_solution
+60s,miplib_air01_dec,PBS,miplib_decision,1,RoundingSat,SATISFIABLE,,0.017,proved
+60s,miplib_air01_dec,PBS,miplib_decision,2,Gurobi,SATISFIABLE,,0.047,proved
+60s,miplib_air01_dec,PBS,miplib_decision,3,SCIP,SATISFIABLE,,0.205,proved
+60s,miplib_air01_dec,PBS,miplib_decision,4,NaPS,SATISFIABLE,,16.549,proved
+60s,miplib_air01_dec,PBS,miplib_decision,5,MaxSAT/RC2,TIMEOUT,,60.022,no_solution
 60s,miplib_lp4l,PBO,miplib_linear_optimization,1,Gurobi,OPTIMUM FOUND,2967,0.104,proved
 60s,miplib_lp4l,PBO,miplib_linear_optimization,2,SCIP,OPTIMUM FOUND,2967,0.119,proved
 60s,miplib_lp4l,PBO,miplib_linear_optimization,3,RoundingSat,OPTIMUM FOUND,2967,17.965,proved

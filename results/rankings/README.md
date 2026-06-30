@@ -135,7 +135,27 @@ PBO。頂点被覆です。
 
 ## 60秒比較ランキング
 
-60秒比較は、差が出やすい4問に絞って実施しました。
+60秒比較は、先に差が出やすい4問で実施し、その後10秒では測っていたが60秒では未測定だった4問を追加しました。
+
+### `bitvector_equalities_17arraycomm`
+
+| rank | solver | result | time | note |
+| ---: | --- | --- | ---: | --- |
+| 1 | MaxSAT/RC2 | UNSATISFIABLE | 0.168 | 確定 |
+| 2 | Gurobi | UNSATISFIABLE | 0.491 | 確定 |
+| 3 | RoundingSat | UNSATISFIABLE | 10.243 | 確定 |
+| 4 | NaPS | UNKNOWN | 60.003 | timeout |
+| 5 | SCIP | SATISFIABLE | 0.044 | 出力解が元OPBで制約違反 |
+
+### `clique_coloring_n5_t3`
+
+| rank | solver | result | value | time |
+| ---: | --- | --- | ---: | ---: |
+| 1 | NaPS | OPTIMUM FOUND | 2 | 0.015 |
+| 2 | Gurobi | OPTIMUM FOUND | 2 | 0.064 |
+| 3 | MaxSAT/RC2 | OPTIMUM FOUND | 2 | 0.082 |
+| 4 | RoundingSat | OPTIMUM FOUND | 2 | 0.098 |
+| 5 | SCIP | OPTIMUM FOUND | 2 | 0.105 |
 
 ### `clique_coloring_n8_t6`
 
@@ -147,6 +167,16 @@ PBO。頂点被覆です。
 | 4 | RoundingSat | SATISFIABLE / TIMEOUT | 2 | 60.002 |
 | 5 | NaPS | SATISFIABLE / TIMEOUT | 3 | 60.002 |
 
+### `knapsack_subset_sum_200`
+
+| rank | solver | result | value | time |
+| ---: | --- | --- | ---: | ---: |
+| 1 | RoundingSat | OPTIMUM FOUND | -48992 | 0.012 |
+| 2 | Gurobi | OPTIMUM FOUND | -48992 | 0.061 |
+| 3 | SCIP | OPTIMUM FOUND | -48992 | 0.142 |
+| 4 | NaPS | SATISFIABLE / TIMEOUT | -48932 | 60.019 |
+| 5 | MaxSAT/RC2 | TIMEOUT |  | 60.034 |
+
 ### `maxcut_5partite_n27`
 
 | rank | solver | result | value | time |
@@ -156,6 +186,16 @@ PBO。頂点被覆です。
 | 3 | RoundingSat | SATISFIABLE / TIMEOUT | -180 | 60.003 |
 | 4 | NaPS | SATISFIABLE / TIMEOUT | -176 | 60.002 |
 | 5 | MaxSAT/RC2 | TIMEOUT |  | 60.004 |
+
+### `miplib_air01_dec`
+
+| rank | solver | result | time | note |
+| ---: | --- | --- | ---: | --- |
+| 1 | RoundingSat | SATISFIABLE | 0.017 | 確定 |
+| 2 | Gurobi | SATISFIABLE | 0.047 | 確定 |
+| 3 | SCIP | SATISFIABLE | 0.205 | 確定 |
+| 4 | NaPS | SATISFIABLE | 16.549 | 確定 |
+| 5 | MaxSAT/RC2 | TIMEOUT | 60.022 | no-sol |
 
 ### `miplib_lp4l`
 

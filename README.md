@@ -51,23 +51,29 @@ scripts/init_third_party.sh
 
 追加のPBS比較問題の出典メモは [problems/pbs_extra](problems/pbs_extra) にあります。圧縮済みPB24 DEC-LINから、頂点被覆、sumineq、subsetcard、bitvector系を1問ずつ使いました。
 
-## 10秒比較の要約
+## 60秒比較の要約
 
 実験日: 2026-06-17  
-制限: `runsolver --wall-clock-limit 10`、各ソルバ内部制限も可能な範囲で10秒。
+制限: `runsolver --wall-clock-limit 60`、各ソルバ内部制限も可能な範囲で60秒。
+
+10秒実験では、問題によっては「暫定解は出ているが最適性証明までは届かない」ケースが多く、ソルバの得意不得意を見るにはやや短すぎました。
+そのため、README冒頭では60秒実験の結果を中心にまとめます。
+10秒の全体表や細かい順位は [results/rankings/README.md](results/rankings/README.md) と [results/gurobi_scip/README.md](results/gurobi_scip/README.md) に残しています。
 
 | 問題 | NaPS | SCIP | Gurobi | RoundingSat | MaxSAT/RC2 |
 | --- | --- | --- | --- | --- | --- |
-| `clique_coloring_n5_t3` | OPT 2, 0.016s | OPT 2, 0.116s | OPT 2, 0.062s | OPT 2, 0.086s | OPT 2, 0.092s |
-| `clique_coloring_n8_t6` | SAT/TIMEOUT, inc 3 | TIMEOUT, inc 2 | OPT 2, 0.305s | SAT/TIMEOUT, inc 2 | OPT 2, 0.163s |
-| `knapsack_subset_sum_200` | UNKNOWN | OPT -48992, 0.196s | OPT -48992, 0.058s | OPT -48992, 0.012s | TIMEOUT |
-| `maxcut_5partite_n27` | SAT/TIMEOUT, inc -156 | TIMEOUT, inc -169 | OPT -180, 2.653s | SAT/TIMEOUT, inc -180 | TIMEOUT |
-| `miplib_air01_dec` | UNKNOWN | SAT, 0.192s | SAT, 0.050s | SAT, 0.015s | TIMEOUT |
-| `miplib_lp4l` | SAT/TIMEOUT, inc 4499 | OPT 2967, 0.100s | OPT 2967, 0.100s | SAT/TIMEOUT, inc 3088 | TIMEOUT |
-| `vertex_cover_grid_dim072` | SAT/TIMEOUT, inc 2664 | TIMEOUT, inc 2664 | TIMEOUT, inc 2664 | OPT 2664, 7.230s | OPT 2664, 1.249s |
-| `bitvector_equalities_17arraycomm` | UNKNOWN | SATだが検算で1制約違反 | UNSAT, 0.067s | UNKNOWN | UNSAT, 0.146s |
+| `bitvector_equalities_17arraycomm` | UNKNOWN | SATだが検算NG | UNSAT, 0.491s | UNSAT, 10.243s | UNSAT, 0.168s |
+| `clique_coloring_n5_t3` | OPT 2, 0.015s | OPT 2, 0.105s | OPT 2, 0.064s | OPT 2, 0.098s | OPT 2, 0.082s |
+| `clique_coloring_n8_t6` | SAT/TIMEOUT, inc 3 | OPT 2, 21.258s | OPT 2, 0.671s | SAT/TIMEOUT, inc 2 | OPT 2, 0.152s |
+| `knapsack_subset_sum_200` | SAT/TIMEOUT, inc -48932 | OPT -48992, 0.142s | OPT -48992, 0.061s | OPT -48992, 0.012s | TIMEOUT |
+| `maxcut_5partite_n27` | SAT/TIMEOUT, inc -176 | OPT -180, 19.653s | OPT -180, 2.673s | SAT/TIMEOUT, inc -180 | TIMEOUT |
+| `miplib_air01_dec` | SAT, 16.549s | SAT, 0.205s | SAT, 0.047s | SAT, 0.017s | TIMEOUT |
+| `miplib_lp4l` | SAT/TIMEOUT, inc 4499 | OPT 2967, 0.119s | OPT 2967, 0.104s | OPT 2967, 17.965s | TIMEOUT |
+| `vertex_cover_grid_dim072` | OPT 2664, 9.503s | TIMEOUT, inc 2664 | TIMEOUT, inc 2664 | OPT 2664, 7.068s | OPT 2664, 1.167s |
 
 `inc` は暫定値です。`SAT/TIMEOUT` は実行可能解は出たが最適性証明までは終わっていない、という意味で読んでください。
+`bitvector_equalities_17arraycomm` のSCIP結果は、ソルバ出力上はSATですが元OPB検算で制約違反があるため、性能比較の勝ちとしては扱いません。
+60秒実験の詳細は [results/sixty_sec/README.md](results/sixty_sec/README.md) にまとめています。
 
 ## 得意分野まとめ
 
@@ -75,23 +81,33 @@ PBS/PBOという問題種別で見た詳しい比較は [results/pbs_pbo/README.
 
 **NaPS**
 
-小さくて論理・基数制約っぽいPBでは速いです。`clique_coloring_n5_t3` は最速級でした。一方、MIPLIB系や大きな重み付き最適化では10秒だと証明まで届きにくいです。
+小さい論理・基数制約では速く、10秒実験の `clique_coloring_n5_t3` は最速級でした。
+60秒実験では `vertex_cover_grid_dim072` を9.503秒で最適性証明しており、頂点被覆のようなPB/MaxSAT寄り構造でも強さが出ます。
+`miplib_air01_dec` も60秒ならSATに到達しました。一方、MIPLIB系PBOやMaxCutでは暫定解止まりになりやすいです。
 
 **SCIP**
 
-MIPとして自然な線形最適化が得意です。`knapsack_subset_sum_200` と `miplib_lp4l` は安定して最適性証明できました。ただし巨大係数を含む `bitvector_equalities_17arraycomm` では、出力解が元OPB検算で制約違反になったため、数値許容誤差に注意が必要です。
+MIPとして自然な線形最適化が得意です。
+60秒実験では `miplib_lp4l` を0.119秒、`maxcut_5partite_n27` を19.653秒、`clique_coloring_n8_t6` を21.258秒で最適性証明しました。
+`knapsack_subset_sum_200` や `miplib_air01_dec` も安定して速いです。ただし `vertex_cover_grid_dim072` は60秒でも証明できず、巨大係数を含むPBSでは数値許容誤差にも注意が必要です。
 
 **Gurobi**
 
-全体的にMIP系で強く、`maxcut_5partite_n27` を10秒以内に最適性証明できた唯一のソルバでした。`clique_coloring_n8_t6` も速いです。WLSライセンスとネットワーク認証が必要です。
+MIP系PBOとMaxCutで非常に強いです。
+60秒実験では `miplib_lp4l` を0.104秒、`maxcut_5partite_n27` を2.673秒で最適性証明し、MaxCutでは5ソルバ中で最も明確に強く出ました。
+`knapsack_subset_sum_200`、`miplib_air01_dec`、`clique_coloring_n8_t6` も速いです。WLSライセンスとネットワーク認証が必要です。
 
 **RoundingSat**
 
-PBネイティブらしく、`knapsack_subset_sum_200` が非常に速いです。`vertex_cover_grid_dim072` も最適性証明まで到達しました。反面、`miplib_lp4l` のようなMIPLIB由来の最適化ではSCIP/Gurobiより苦戦します。
+PBネイティブらしく、ナップサックや頂点被覆で強いです。
+60秒実験では `vertex_cover_grid_dim072` を7.068秒で証明し、`miplib_lp4l` も17.965秒で証明しました。
+`knapsack_subset_sum_200` は0.012秒、`miplib_air01_dec` は0.017秒で解けており、PBネイティブ系としての強さがかなりはっきり出ます。`maxcut_5partite_n27` では最適値らしい暫定解 `-180` まで到達しましたが、60秒では最適性証明に届きませんでした。
 
 **MaxSAT/RC2**
 
-PBをMaxSATへ変換して解くため、論理・基数制約や頂点被覆系で鋭く効きます。`clique_coloring_n8_t6` と `vertex_cover_grid_dim072` は非常に速いです。一方でナップサックやMIPLIB系の大きな重み付き線形制約は苦手です。
+PBをMaxSATへ変換して解くため、論理・基数制約や頂点被覆系で鋭く効きます。
+60秒実験では `clique_coloring_n8_t6` を0.152秒、`vertex_cover_grid_dim072` を1.167秒で最適性証明し、この2系統では最速でした。
+`bitvector_equalities_17arraycomm` のUNSAT証明も0.168秒で速いです。一方でナップサック、MaxCut、MIPLIB系の大きな重み付き線形制約は苦手です。
 
 ## 実行コマンド
 

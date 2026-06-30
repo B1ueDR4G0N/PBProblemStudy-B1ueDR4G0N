@@ -9,7 +9,7 @@
 | ファイル | 内容 |
 | --- | --- |
 | [gurobi_scip/README.md](gurobi_scip/README.md) | 5ソルバの10秒比較。NaPS、SCIP、Gurobi、RoundingSat、MaxSAT/RC2 |
-| [sixty_sec/README.md](sixty_sec/README.md) | 差が出やすい4問に絞った60秒比較 |
+| [sixty_sec/README.md](sixty_sec/README.md) | 10秒比較対象を60秒で再測定した比較 |
 | [pbs_pbo/README.md](pbs_pbo/README.md) | PBS/PBOという問題種別で見た比較 |
 | [naps_fastest/README.md](naps_fastest/README.md) | NaPSが5ソルバ中で最速になる例 |
 | [rankings/README.md](rankings/README.md) | 各問題ごとの1位から5位の順位表 |
@@ -52,13 +52,13 @@ PBネイティブ系らしく、ナップサックと頂点被覆で強いです
 
 | 問題 | 強かったソルバ | 結果 |
 | --- | --- | --- |
-| `clique_coloring_n5_t3` | NaPS | 0.016秒で最適値2 |
+| `clique_coloring_n5_t3` | NaPS | 0.015秒で最適値2 |
 | `clique_coloring_n8_t6` | MaxSAT/RC2 | 0.152秒で最適値2 |
 | `knapsack_subset_sum_200` | RoundingSat | 0.012秒で最適値-48992 |
 | `maxcut_5partite_n27` | Gurobi | 2.673秒で最適値-180 |
 | `miplib_lp4l` | Gurobi / SCIP | 0.1秒前後で最適値2967 |
 | `vertex_cover_grid_dim072` | MaxSAT/RC2 | 1.167秒で最適値2664 |
-| `miplib_air01_dec` | RoundingSat | 0.015秒でSAT |
+| `miplib_air01_dec` | RoundingSat | 0.017秒でSAT |
 
 ## 残っているログ
 
