@@ -121,6 +121,9 @@ grep -E '^(WCTIME|CPUTIME|TIMEOUT)=' some.var
 ## 基本の実行コマンド
 
 以下はPBSolverディレクトリ直下から実行します。
+この節のコマンド例では、runsolverの出力先として `/tmp` を指定しています。
+そのため、たとえばGurobiの例ならソルバ本体の出力は `/tmp/gurobi.watcher.log`、実行時間やタイムアウト情報は `/tmp/gurobi.var` に保存されます。
+`/tmp` は一時領域なので、ログを後から残したい場合は `LOG/gurobi.watcher.log` や `results/run/gurobi/...` のようなリポジトリ内の保存用ディレクトリに置き換えてください。
 
 ### NaPS
 
